@@ -11,21 +11,21 @@ try:
     from odoo.addons.phone_validation.tools.phone_validation import phone_format
 except ImportError:
 
-    def phone_format(
-        number,
-        country_code,
-        country_phone_code,
-        force_format="INTERNATIONAL",
-        raise_exception=True,
-    ):
-        return number
+def phone_format(
+    number,
+    country_code,
+    country_phone_code,
+    force_format="INTERNATIONAL",
+    raise_exception=True,
+):
+    return number
 
 
 class HrEmployeePrivate(models.Model):
     _name = "hr.employee"
-    _inherit = ["hr.employee"]
+    _inherit = ["hr.employee", "phone.validation.mixin"]
     _phone_name_sequence = 30
-    _phone_name_fields = ["mobile_phone", "phone.validation.mixin"]
+    _phone_name_fields = ["mobile_phone"]
     # work_phone is now a computed field that take the value address_id.phone
     # Don't put emergency_phone in _phone_name_fields because it is not a phone
     # number of the employee
