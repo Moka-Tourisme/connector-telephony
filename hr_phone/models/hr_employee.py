@@ -10,15 +10,14 @@ from odoo import api, models
 try:
     from odoo.addons.phone_validation.tools.phone_validation import phone_format
 except ImportError:
-
-def phone_format(
-    number,
-    country_code,
-    country_phone_code,
-    force_format="INTERNATIONAL",
-    raise_exception=True,
-):
-    return number
+    def phone_format(
+        number,
+        country_code,
+        country_phone_code,
+        force_format="INTERNATIONAL",
+        raise_exception=True,
+    ):
+        return number
 
 
 class HrEmployeePrivate(models.Model):
