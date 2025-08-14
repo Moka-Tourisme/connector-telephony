@@ -2,9 +2,9 @@
 # @author Pierre Verkest <pierreverkest84@gmail.com>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 {
-    "name": "SMS sendinblue HTTP",
-    "summary": "Send sms using sendinblue http API",
-    "version": "15.0.1.0.0",
+    "name": "SMS Brevo HTTP",
+    "summary": "Send sms using Brevo http API",
+    "version": "16.0.1.0.0",
     "category": "SMS",
     "website": "https://github.com/OCA/connector-telephony",
     "author": "Pierre Verkest <pierreverkest84@gmail.com>, Odoo Community Association (OCA)",

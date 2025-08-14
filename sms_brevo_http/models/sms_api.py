@@ -8,7 +8,7 @@ import requests
 from odoo import _, api, models
 from odoo.exceptions import UserError
 
-SENDINBLUE_HTTP_ENDPOINT = "https://api.sendinblue.com/v3/transactionalSMS/sms"
+SENDINBLUE_HTTP_ENDPOINT = "https://api.brevo.com/v3/transactionalSMS/sms"
 
 
 _logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ class SmsApi(models.AbstractModel):
     def _get_sms_account(self):
         return self.env["iap.account"].get("sms")
 
-    def _send_sms_with_sendinblue_http(self, number, message, sms_id):
+    def _send_sms_with_brevo_http(self, number, message, sms_id):
         if not number:
             return "wrong_number_format", -1
 
@@ -30,7 +30,7 @@ class SmsApi(models.AbstractModel):
             "type": "transactional",
             "unicodeEnabled": False,
             "recipient": number,
-            "sender": account.sms_sendinblue_http_from,
+            "sender": account.sms_brevo_http_from,
             "content": message,
             # "tag": "tag",
             # "webUrl": "https://myWebHookTriger"
@@ -39,10 +39,10 @@ class SmsApi(models.AbstractModel):
         headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "api-key": account.sms_sendinblue_http_api_key,
+            "api-key": account.sms_brevo_http_api_key,
         }
 
-        # SENDINBLUE API DOC https://developers.sendinblue.com/reference/sendtransacsms
+        # SENDINBLUE API DOC https://developers.brevo.com/reference/sendtransacsms
         response = requests.post(
             SENDINBLUE_HTTP_ENDPOINT, json=payload, headers=headers
         )
@@ -65,12 +65,12 @@ class SmsApi(models.AbstractModel):
 
         return "success", res.get("remainingCredits", 0)
 
-    def _is_sent_with_sendinblue(self):
-        return self._get_sms_account().provider == "sms_sendinblue_http"
+    def _is_sent_with_brevo(self):
+        return self._get_sms_account().provider == "sms_brevo_http"
 
     @api.model
     def _send_sms(self, numbers, message):
-        if self._is_sent_with_sendinblue():
+        if self._is_sent_with_brevo():
             # This method seem to be deprecated (no odoo code use it)
             # as SENDINBLUE do not support it we do not support it
             # Note: if you want to implement it becarefull just looping
@@ -83,16 +83,16 @@ class SmsApi(models.AbstractModel):
 
     @api.model
     def _send_sms_batch(self, messages):
-        if self._is_sent_with_sendinblue():
+        if self._is_sent_with_brevo():
             if len(messages) != 1:
                 # we already have inherited the split_batch method on sms.sms
                 # so this case shouldsnot append
                 raise UserError(
                     _(
-                        "Batch sending is not implemented by this module sms_sendinblue_http"
+                        "Batch sending is not implemented by this module sms_brevo_http"
                     )
                 )
-            state, credit = self._send_sms_with_sendinblue_http(
+            state, credit = self._send_sms_with_brevo_http(
                 messages[0]["number"], messages[0]["content"], messages[0]["res_id"]
             )
             return [{"state": state, "credit": credit, "res_id": messages[0]["res_id"]}]

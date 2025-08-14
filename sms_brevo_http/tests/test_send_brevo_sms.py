@@ -16,15 +16,15 @@ class SendSmsCase(TransactionCase):
         super().setUpClass()
         cls.account = cls.env["iap.account"].create(
             {
-                "name": "SENDINBLUE",
-                "provider": "sms_sendinblue_http",
-                "sms_sendinblue_http_api_key": "foo",
-                "sms_sendinblue_http_from": "TEST",
+                "name": "Brevo",
+                "provider": "sms_brevo_http",
+                "sms_brevo_http_api_key": "foo",
+                "sms_brevo_http_from": "TEST",
             }
         )
 
     def test_get_credits_url(self):
-        self.assertTrue("sendinblue.com" in self.account.get_credits_url("sms"))
+        self.assertTrue("brevo.com" in self.account.get_credits_url("sms"))
         self.assertTrue("iap.odoo.com" in self.account.get_credits_url("other"))
 
     def test_check_service_name(self):
@@ -137,7 +137,7 @@ class SendSmsCase(TransactionCase):
             self.assertEqual(len(m.request_history), 1)
         sms = self.env["sms.sms"].search([("partner_id", "=", partner.id)])
         self.assertEqual(sms.error_detail, "Test error message")
-        self.assertEqual(sms.failure_type, "sms_sendinblue_duplicate_parameter")
+        self.assertEqual(sms.failure_type, "sms_brevo_duplicate_parameter")
         self.assertEqual(sms.state, "error")
 
     def test_no_number_case(self):
@@ -159,7 +159,7 @@ class SendSmsCase(TransactionCase):
     def test_split_not_used_raise(self):
         with self.assertRaisesRegex(
             UserError,
-            "Batch sending is not implemented by this module sms_sendinblue_http",
+            "Batch sending is not implemented by this module sms_brevo_http",
         ):
 
             SMSs = self.env["sms.sms"].create(
@@ -181,6 +181,6 @@ class SendSmsCase(TransactionCase):
     def test_get_sms_api_error_messages(self):
         messages = self.env["sms.api"]._get_sms_api_error_messages()
         self.assertTrue(
-            "https://app.sendinblue.com" in messages["not_enough_credits"],
-            f"Couldn't found sendinblue.com in {messages['not_enough_credits']}",
+            "https://app.brevo.com" in messages["not_enough_credits"],
+            f"Couldn't found brevo.com in {messages['not_enough_credits']}",
         )

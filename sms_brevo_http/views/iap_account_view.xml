@@ -11,12 +11,12 @@
         <field name="arch" type="xml">
             <xpath expr="//group[@name='account']" position="after">
                 <group
-                    string="SMS Sendinblue settings"
-                    name="sendinblue"
-                    attrs="{'invisible': [('provider', '!=', 'sms_sendinblue_http')]}"
+                    string="SMS Brevo settings"
+                    name="brevo"
+                    attrs="{'invisible': [('provider', '!=', 'sms_brevo_http')]}"
                 >
-                    <field name="sms_sendinblue_http_api_key" password="True" />
-                    <field name="sms_sendinblue_http_from" />
+                    <field name="sms_brevo_http_api_key" password="True" />
+                    <field name="sms_brevo_http_from" />
                 </group>
             </xpath>
         </field>

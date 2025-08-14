@@ -8,6 +8,6 @@ To configure this module, you need to:
 * **On Odoo**
 
   * Go to IAP menu
-  * Create a new account with **SMS Sendinblue** as provider
+  * Create a new account with **SMS Brevo** as provider
   * Fill your account information
   * You can now send SMSs
