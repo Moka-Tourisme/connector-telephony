@@ -25,7 +25,7 @@ class HrEmployeePrivate(models.Model):
     _name = "hr.employee"
     _inherit = ["hr.employee"]
     _phone_name_sequence = 30
-    _phone_name_fields = ["mobile_phone"]
+    _phone_name_fields = ["mobile_phone", "phone.validation.mixin"]
     # work_phone is now a computed field that take the value address_id.phone
     # Don't put emergency_phone in _phone_name_fields because it is not a phone
     # number of the employee
